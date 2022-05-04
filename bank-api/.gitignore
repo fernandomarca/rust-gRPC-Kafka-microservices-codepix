@@ -1,0 +1,15 @@
+.idea/
+.vscode/
+node_modules/
+build/
+tmp/
+temp/
+
+.history/
+.docker/dbdata
+.docker/dbdatabbx
+.docker/dbdatacter
+dist-bbx
+dist-cter
+dist
+.env

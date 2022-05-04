@@ -1,0 +1,3 @@
+
+ALTER TABLE account
+  DROP COLUMN IF EXISTS bank_id CASCADE;

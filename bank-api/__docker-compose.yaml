@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    entrypoint: .docker/entrypoint.sh
+    container_name: imersao-fullcycle-nest-bank
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/home/node/app
+    depends_on:
+      - db_bank
+    extra_hosts:
+    - "host.docker.internal:172.17.0.1"
+
+  db_bank:
+    build: .docker/postgres
+    container_name: imersao-fullcycle-nest-bank-db
+    tty: true
+    volumes:
+      - .docker/dbdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=nest
+
+networks:
+  default:
+    external:
+      name: apache-kafka_default

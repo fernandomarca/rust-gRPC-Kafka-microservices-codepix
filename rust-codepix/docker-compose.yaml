@@ -1,0 +1,40 @@
+version: "3"
+  
+services:
+  app:
+    build: .
+    #entrypoint: /rust/.docker/entrypoint.sh
+    ports:
+      - "50051:50051"
+    volumes:
+      - .:/rust
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+
+  db:
+    build: .docker/postgres
+    #restart: always
+    tty: true
+    volumes:
+      - /rust/.docker/dbdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=codepix
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    tty: true
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@user.com
+      - PGADMIN_DEFAULT_PASSWORD=123456
+    ports:
+      - "9000:80"
+    depends_on:
+      - db
+
+networks:
+  default:
+    external:
+      name: apache-kafka_default

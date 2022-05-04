@@ -1,0 +1,90 @@
+generator client {
+  provider      = "prisma-client-rust"
+  output        = "../src/infrastructure/prisma_db/db.rs"
+  binaryTargets = ["native"]
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./erd.svg"
+}
+
+generator dbml {
+  provider   = "prisma-dbml-generator"
+  outputName = "dev.dbml"
+}
+
+generator docs {
+  provider = "node node_modules/prisma-docs-generator"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model AccountP {
+  id         String  @id @unique @default(uuid())
+  owner_name String
+  bank_id    String
+  number     String
+  created_at String
+  updated_at String?
+
+  bank    BankP  @relation(fields: [bankId2], references: [id])
+  bankId2 String
+
+  pix_keys     PixKeyP[]
+  TransactionP TransactionP[]
+  @@map("account")
+}
+
+model BankP {
+  id         String  @id @unique @default(uuid())
+  name       String
+  code       String
+  created_at String
+  updated_at String?
+
+  account AccountP[]
+
+  @@map("bank")
+}
+
+model PixKeyP {
+  id   String @id @unique @default(uuid())
+  kind String
+  key  String
+
+  created_at String
+  updated_at String?
+
+  account    AccountP @relation(fields: [account_id], references: [id])
+  account_id String
+  status     String
+
+  TransactionP TransactionP[]
+  @@map("pixkey")
+}
+
+model TransactionP {
+  id              String   @id @unique @default(uuid())
+  account_from    AccountP @relation(fields: [accountPId], references: [id])
+  accountPId      String
+  account_from_id String
+
+  amount Float
+
+  pix_key_to    PixKeyP @relation(fields: [pixKeyPId], references: [id])
+  pixKeyPId     String
+  pix_key_id_to String
+
+  status             String
+  description        String
+  cancel_description String?
+
+  created_at String
+  updated_at String?
+
+  @@map("transaction")
+}

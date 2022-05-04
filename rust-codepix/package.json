@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "prisma:migrate": "DISABLE_ERD=true npx prisma migrate dev && cpx ./prisma/dev.db/ ./",
+    "prisma:db": "cpx ./prisma/dev.db/ ./",
+    "prisma:generate": "npx prisma generate",
+    "prisma:docs": "npx prisma-docs-generator serve"
+  },
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^8.14.0",
+    "prisma-dbml-generator": "^0.9.0",
+    "prisma-erd-generator": "^0.11.0"
+  },
+  "dependencies": {
+    "cpx2": "^4.2.0",
+    "prisma-docs-generator": "^0.5.0"
+  },
+  "license": "MIT"
+}
